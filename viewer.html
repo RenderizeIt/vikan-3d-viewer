@@ -20,10 +20,10 @@
       padding: 40px 20px;
     }
 
-    /* LOGO */
+    /* LOGO (EDIT SPACING HERE) */
     .logo {
       width: 90px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
 
     /* TITLE */
@@ -41,15 +41,28 @@
       margin-bottom: 20px;
     }
 
-    /* INSTRUCTION */
+    /* INSTRUCTION OVERLAY */
     .instruction {
-      display: inline-block;
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+
       padding: 10px 18px;
       border-radius: 999px;
       background: rgba(255,255,255,0.08);
       font-size: 0.9rem;
-      margin-bottom: 25px;
       backdrop-filter: blur(6px);
+
+      transition: opacity 0.4s ease;
+      opacity: 1;
+    }
+
+    /* VIEWER CONTAINER */
+    .viewer-container {
+      position: relative;
+      margin-top: 20px;
     }
 
     /* VIEWER FRAME */
@@ -57,8 +70,11 @@
       border-radius: 16px;
       overflow: hidden;
       background: #0f0f0f;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 40px rgba(100,150,255,0.15);
       border: 1px solid rgba(255,255,255,0.05);
+
+      box-shadow: 
+        0 20px 50px rgba(0,0,0,0.6),
+        0 0 40px rgba(100,150,255,0.15);
     }
 
     iframe {
@@ -69,7 +85,7 @@
       display: block;
     }
 
-    /* FOOTER BRANDING */
+    /* FOOTER */
     .footer {
       margin-top: 20px;
       font-size: 0.8rem;
@@ -87,7 +103,6 @@
         min-height: 420px;
       }
     }
-
   </style>
 </head>
 
@@ -104,24 +119,53 @@
     <!-- SUBTITLE -->
     <div class="subtitle">Real-time 3D product visualization</div>
 
-    <!-- INSTRUCTIONS -->
-    <div class="instruction">Drag to rotate</div>
-
     <!-- VIEWER -->
-    <div class="viewer-wrapper">
-      <iframe src="HyGo_Web_Blue.html" allowfullscreen></iframe>
+    <div class="viewer-container">
+
+      <!-- INSTRUCTIONS -->
+      <div class="instruction">Drag to rotate</div>
+
+      <!-- VIEWER FRAME -->
+      <div class="viewer-wrapper">
+        <iframe src="HyGo_Web_Blue.html" allowfullscreen></iframe>
+      </div>
+
     </div>
 
     <!-- FOOTER -->
     <div class="footer">Renderize It • Product Visualization Studio</div>
 
   </div>
-  
+
+  <!-- INTERACTION SCRIPT -->
   <script>
+    const instruction = document.querySelector('.instruction');
+    const viewer = document.querySelector('.viewer-container');
+
+    // Fade out after load (4s)
     setTimeout(() => {
-      const el = document.querySelector('.instruction');
-      if (el) el.style.opacity = '0';
+      if (instruction) instruction.style.opacity = '0';
     }, 4000);
+
+    // Show on hover
+    viewer.addEventListener('mouseenter', () => {
+      if (instruction) instruction.style.opacity = '1';
+    });
+
+    // Hide when mouse leaves
+    viewer.addEventListener('mouseleave', () => {
+      if (instruction) instruction.style.opacity = '0';
+    });
+
+    // 🔥 Hide immediately when user interacts (click/drag)
+    viewer.addEventListener('mousedown', () => {
+      if (instruction) instruction.style.opacity = '0';
+    });
+
+    // 🔥 Mobile interaction
+    viewer.addEventListener('touchstart', () => {
+      if (instruction) instruction.style.opacity = '0';
+    });
   </script>
 
 </body>
